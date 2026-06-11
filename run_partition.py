@@ -261,6 +261,8 @@ def scrape_task(task, headers):
     
     all_records = []
     page_num = 0
+    consecutive_no_new = 0
+    failed_attempts = 0
     
     logger.info(f"Scraping '{name}' [{status}] ({ptype})")
     
@@ -274,10 +276,17 @@ def scrape_task(task, headers):
         
         res = fetch_page_with_retry(session, url, headers)
         if not res or res.status_code != 200:
-            break
+            failed_attempts += 1
+            logger.warning(f"Failed to fetch page {page_num} for '{name}' (status: {res.status_code if res else 'Timeout'}). skipping page.")
+            if failed_attempts >= 5:
+                logger.error(f"Too many page failures ({failed_attempts}) for '{name}'. Stopping scrape.")
+                break
+            page_num += 1
+            continue
             
         records = parse_tenders_from_html(res.text)
         if not records:
+            logger.info(f"Reached end of records (empty page) for '{name}' at page {page_num}.")
             break
             
         # Avoid duplicate entries on parsing
@@ -287,10 +296,17 @@ def scrape_task(task, headers):
                 new_records.append(r)
                 
         if not new_records:
-            break
+            consecutive_no_new += 1
+            # Allow up to 12 consecutive pages with duplicate records before concluding we hit the end
+            if consecutive_no_new >= 12:
+                logger.info(f"Stopping crawl for '{name}': encountered 12 consecutive pages of duplicates.")
+                break
+        else:
+            consecutive_no_new = 0
+            all_records.extend(new_records)
             
-        all_records.extend(new_records)
         if len(records) < 10:
+            logger.info(f"Reached last page (less than 10 records: {len(records)}) for '{name}' at page {page_num}.")
             break
             
         page_num += 1
