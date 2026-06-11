@@ -27,6 +27,10 @@ BACKOFF_FACTOR = 2
 MIN_DELAY = 0.5
 MAX_DELAY = 1.5
 
+# Time tracking for preventing job timeouts (6-hour limit in GitHub Actions)
+START_TIME = time.time()
+MAX_RUN_TIME = 5.2 * 3600  # 5.2 hours in seconds
+
 def clean_filename(name):
     for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|']:
         name = name.replace(char, '_')
@@ -235,6 +239,10 @@ def scrape_task(task, headers):
     status = task["status"]
     ptype = task["type"]
     
+    if time.time() - START_TIME > MAX_RUN_TIME:
+        logger.warning(f"Approaching 6-hour limit. Skipping execution for '{name}' to save progress cache.")
+        return
+        
     endpoint = "statedata" if ptype == "state" else "cpppdata"
     
     clean_name_dir = clean_filename(name)

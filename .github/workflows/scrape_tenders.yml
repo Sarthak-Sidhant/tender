@@ -25,6 +25,14 @@ jobs:
     - name: Install dependencies
       run: pip install requests beautifulsoup4
 
+    - name: Restore cache for partition results
+      uses: actions/cache@v4
+      with:
+        path: results/
+        key: tenders-results-${{ matrix.job_index }}-${{ github.run_id }}
+        restore-keys: |
+          tenders-results-${{ matrix.job_index }}-
+
     - name: Run Scraper Partition
       run: |
         # Each matrix job scrapes only its load-balanced slice of tasks

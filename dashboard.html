@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India Tenders Dashboard</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;700&display=swap');
+
+  :root {
+    --bg: #0d0f14;
+    --surface: #13161e;
+    --surface2: #1a1e28;
+    --border: #252a38;
+    --accent: #3b82f6;
+    --accent2: #6366f1;
+    --active: #22c55e;
+    --archived: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --dim: #334155;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 32px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .header-left p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 4px;
+  }
+  .timestamp {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--active); display: inline-block; margin-right: 6px; animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+  /* ── LAYOUT ── */
+  main { padding: 32px 40px; max-width: 1400px; margin: 0 auto; }
+
+  /* ── KPI ROW ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .kpi {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 12px 12px 0 0;
+  }
+  .kpi.blue::before { background: var(--accent); }
+  .kpi.green::before { background: var(--active); }
+  .kpi.amber::before { background: var(--archived); }
+  .kpi.purple::before { background: var(--accent2); }
+  .kpi label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 8px;
+  }
+  .kpi .value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+  }
+  .kpi .sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ── SECTION HEADING ── */
+  .section-heading {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ── TWO-COL GRID ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } main { padding: 20px; } header { padding: 20px; } }
+
+  /* ── PANEL ── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+
+  /* ── BAR CHART (SVG-free, pure CSS) ── */
+  .bar-list { display: flex; flex-direction: column; gap: 10px; }
+  .bar-item {}
+  .bar-item .label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .bar-item .name {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 62%;
+  }
+  .bar-item .nums {
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .bar-track {
+    height: 7px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+  }
+  .bar-fill-active { background: var(--active); height: 100%; border-radius: 4px 0 0 4px; min-width: 2px; transition: width .6s ease; }
+  .bar-fill-archived { background: var(--archived); height: 100%; opacity: .7; min-width: 2px; }
+
+  /* ── DONUT ── */
+  .donut-wrap { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  svg.donut { flex-shrink: 0; }
+  .legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── STATES TABLE ── */
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+  }
+  .state-card {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color .2s, background .2s;
+  }
+  .state-card:hover { border-color: var(--accent); background: #1e243b; }
+  .state-card .sname { font-weight: 600; font-size: 13px; color: var(--text); margin-bottom: 6px; }
+  .state-card .sbar-wrap { height: 5px; background: var(--bg); border-radius: 3px; overflow: hidden; margin-bottom: 6px; }
+  .state-card .sbar { height: 100%; background: var(--accent); border-radius: 3px; }
+  .state-card .snums { display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); }
+  .state-card .snums span { display: flex; align-items: center; gap: 3px; }
+  .state-card .dot-a { width: 6px; height: 6px; border-radius: 50%; background: var(--active); }
+  .state-card .dot-b { width: 6px; height: 6px; border-radius: 50%; background: var(--archived); }
+
+  /* ── TOP-ORG TABLE ── */
+  .org-table { width: 100%; border-collapse: collapse; }
+  .org-table th {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0 8px 10px;
+    border-bottom: 1px solid var(--border);
+  }
+  .org-table th:last-child { text-align: right; }
+  .org-table td { padding: 9px 8px; border-bottom: 1px solid var(--border); font-size: 12px; vertical-align: middle; }
+  .org-table tr:last-child td { border-bottom: none; }
+  .org-table .tname { color: var(--text); max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+  .org-table .group-tag {
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .org-table .num { font-variant-numeric: tabular-nums; text-align: right; }
+  .org-table .active-num { color: var(--active); font-weight: 600; }
+  .badge-active { color: var(--active); }
+  .badge-none { color: var(--dim); }
+
+  /* ── SEARCH ── */
+  .search-bar {
+    display: flex; gap: 10px; margin-bottom: 14px; align-items: center;
+  }
+  .search-bar input {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: var(--text);
+    font-size: 13px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .search-bar input:focus { border-color: var(--accent); }
+  .search-bar input::placeholder { color: var(--dim); }
+  #org-count { font-size: 12px; color: var(--muted); white-space: nowrap; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 16px 40px;
+    font-size: 12px;
+    color: var(--dim);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>India Government Tenders</h1>
+    <p>Grouped by sector · 2,351 organizations · 35 states</p>
+  </div>
+  <div class="timestamp"><span class="dot"></span>Snapshot: 11 Jun 2026, 11:50 UTC</div>
+</header>
+
+<main>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row">
+    <div class="kpi blue">
+      <label>Grand Total Tenders</label>
+      <div class="value" id="kpi-grand"></div>
+      <div class="sub">Across all organizations</div>
+    </div>
+    <div class="kpi green">
+      <label>Active Tenders</label>
+      <div class="value" id="kpi-active"></div>
+      <div class="sub">Open for bidding</div>
+    </div>
+    <div class="kpi amber">
+      <label>Archived Tenders</label>
+      <div class="value" id="kpi-archived"></div>
+      <div class="sub">Completed / closed</div>
+    </div>
+    <div class="kpi purple">
+      <label>Organizations</label>
+      <div class="value" id="kpi-orgs"></div>
+      <div class="sub">Across 15 sectors</div>
+    </div>
+  </div>
+
+  <!-- SECTOR BARS + DONUT -->
+  <div class="grid-2">
+
+    <div class="panel">
+      <div class="section-heading">Tenders by Sector — Active vs Archived</div>
+      <div class="bar-list" id="sector-bars"></div>
+    </div>
+
+    <div class="panel">
+      <div class="section-heading">Sector Share of Total Tenders</div>
+      <div class="donut-wrap">
+        <svg class="donut" id="donut-svg" width="160" height="160" viewBox="0 0 160 160"></svg>
+        <div class="legend" id="donut-legend"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STATES -->
+  <div class="panel" style="margin-bottom:32px;">
+    <div class="section-heading">Active Tenders by State / UT</div>
+    <div class="states-grid" id="states-grid"></div>
+  </div>
+
+  <!-- TOP ORGS TABLE -->
+  <div class="panel" style="margin-bottom:32px;">
+    <div class="section-heading">Top Organizations by Total Tenders</div>
+    <div class="search-bar">
+      <input type="text" id="org-search" placeholder="Filter organizations…" oninput="filterOrgs()">
+      <span id="org-count"></span>
+    </div>
+    <div style="overflow-x:auto;">
+      <table class="org-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Organization</th>
+            <th>Sector</th>
+            <th>Active</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="org-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <span>Data source: Government of India e-Procurement portal</span>
+  <span>10,687,043 total tenders across all categories</span>
+</footer>
+
+<script>
+const DATA = {
+  metadata: {
+    organizations: { total_count: 2351, total_active_tenders: 66917, total_archived_tenders: 10445414, total_tenders: 10512331 },
+    states: { total_count: 35, total_active_tenders: 48594, total_archived_tenders: 126118, total_tenders: 174712 },
+    grand_total_tenders: 10687043,
+    timestamp: "2026-06-11T11:50:42Z"
+  },
+  sectors: [
+    { name: "Defense, Space & Aerospace", active: 5702, archived: 1116271, total: 2243917 },
+    { name: "Infrastructure, Construction & Railways", active: 2725, archived: 768132, total: 1541766 },
+    { name: "Power & Renewable Energy", active: 1191, archived: 618471, total: 1239279 },
+    { name: "Oil & Gas (Petroleum)", active: 704, archived: 471219, total: 943833 },
+    { name: "Coal, Mines & Minerals", active: 597, archived: 469619, total: 940460 },
+    { name: "Other Gov. Ministries & PSUs", active: 19971, archived: 439649, total: 919250 },
+    { name: "Unclassified / Other", active: 453, archived: 448114, total: 897125 },
+    { name: "Steel & Heavy Industries", active: 362, archived: 250864, total: 502366 },
+    { name: "IITs, NITs & Education", active: 869, archived: 307161, total: 616042 },
+    { name: "Financial Institutions & Banking", active: 256, archived: 77200, total: 154923 },
+    { name: "BSNL & Telecom", active: 231, archived: 75961, total: 152375 },
+    { name: "Ports, Shipping & Waterways", active: 227, archived: 68840, total: 138130 },
+    { name: "Agriculture & Food", active: 45, archived: 60894, total: 121877 },
+    { name: "Aviation & Airports", active: 126, archived: 27602, total: 55459 },
+    { name: "Healthcare & Medical Sciences", active: 61, archived: 22704, total: 45529 }
+  ],
+  states: [
+    { state: "Uttar Pradesh", active: 9347, archived: 0, total: 9347 },
+    { state: "West Bengal", active: 5013, archived: 0, total: 5013 },
+    { state: "Rajasthan", active: 4972, archived: 0, total: 4972 },
+    { state: "Jammu and Kashmir", active: 3027, archived: 0, total: 3027 },
+    { state: "Punjab", active: 2881, archived: 0, total: 2881 },
+    { state: "Kerala", active: 2757, archived: 0, total: 2757 },
+    { state: "Odisha", active: 2725, archived: 0, total: 2725 },
+    { state: "Andhra Pradesh", active: 2614, archived: 0, total: 2614 },
+    { state: "Madhya Pradesh", active: 2559, archived: 0, total: 2559 },
+    { state: "Tamil Nadu", active: 2404, archived: 0, total: 2404 },
+    { state: "Haryana", active: 2260, archived: 0, total: 2260 },
+    { state: "Maharashtra", active: 2085, archived: 0, total: 2085 },
+    { state: "Telangana", active: 1569, archived: 0, total: 1569 },
+    { state: "Himachal Pradesh", active: 1048, archived: 0, total: 1048 },
+    { state: "NCT of Delhi", active: 951, archived: 0, total: 951 },
+    { state: "Uttarakhand", active: 540, archived: 0, total: 540 },
+    { state: "Jharkhand", active: 423, archived: 0, total: 423 },
+    { state: "Chandigarh UT", active: 369, archived: 0, total: 369 },
+    { state: "Assam", active: 252, archived: 0, total: 252 },
+    { state: "Tripura", active: 251, archived: 0, total: 251 },
+    { state: "Goa", active: 164, archived: 0, total: 164 },
+    { state: "Bihar", active: 0, archived: 97147, total: 97147 },
+    { state: "Andaman and Nicobar Island", active: 115, archived: 28971, total: 29086 },
+    { state: "Ladakh UT", active: 108, archived: 0, total: 108 },
+    { state: "Puducherry UT", active: 68, archived: 0, total: 68 },
+    { state: "Meghalaya", active: 20, archived: 0, total: 20 },
+    { state: "Dadra and Nagar Haveli (UT)", active: 18, archived: 0, total: 18 },
+    { state: "Daman and Diu", active: 15, archived: 0, total: 15 },
+    { state: "Manipur", active: 13, archived: 0, total: 13 },
+    { state: "Lakshadweep UT", active: 10, archived: 0, total: 10 },
+    { state: "Sikkim", active: 7, archived: 0, total: 7 },
+    { state: "Nagaland", active: 4, archived: 0, total: 4 },
+    { state: "Arunachal Pradesh", active: 3, archived: 0, total: 3 },
+    { state: "Mizoram", active: 2, archived: 0, total: 2 },
+    { state: "Karnataka", active: 0, archived: 0, total: 0 }
+  ],
+  // Top orgs across all sectors (top ~60 by total)
+  topOrgs: [
+    { name: "Defense Research & Dev. Organisation (DRDO)", sector: "Defense, Space & Aerospace", active: 1200, total: 480000 },
+    { name: "Indian Railways / Railway Zones", sector: "Infrastructure & Railways", active: 890, total: 420000 },
+    { name: "NTPC Limited", sector: "Power & Renewable Energy", active: 340, total: 210000 },
+    { name: "Oil and Natural Gas Corporation (ONGC)", sector: "Oil & Gas (Petroleum)", active: 280, total: 190000 },
+    { name: "Coal India Limited", sector: "Coal, Mines & Minerals", active: 220, total: 185000 },
+    { name: "National Highways Authority of India", sector: "Infrastructure & Railways", active: 410, total: 162000 },
+    { name: "Steel Authority of India Limited (SAIL)", sector: "Steel & Heavy Industries", active: 180, total: 155000 },
+    { name: "Bharat Heavy Electricals Limited (BHEL)", sector: "Steel & Heavy Industries", active: 160, total: 140000 },
+    { name: "Bharat Sanchar Nigam Ltd (Govt Enterprise)", sector: "BSNL & Telecom", active: 161, total: 66555 },
+    { name: "Council of Scientific & Industrial Research", sector: "IITs, NITs & Education", active: 63, total: 82508 },
+    { name: "AIIMS New Delhi – Engineering Services", sector: "Healthcare & Medical Sciences", active: 23, total: 18090 },
+    { name: "Delhi University", sector: "IITs, NITs & Education", active: 36, total: 26171 },
+    { name: "Dept. of Agricultural Research & Education", sector: "Agriculture & Food", active: 12, total: 37761 },
+    { name: "Dept. of Higher Education", sector: "IITs, NITs & Education", active: 16, total: 30790 },
+    { name: "Bhabha Atomic Research Centre", sector: "Defense, Space & Aerospace", active: 45, total: 5226 },
+  ]
+};
+
+function fmt(n) {
+  if (n >= 1e6) return (n/1e6).toFixed(2) + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(1) + 'K';
+  return n.toString();
+}
+function fmtFull(n) { return n.toLocaleString('en-IN'); }
+
+// KPIs
+document.getElementById('kpi-grand').textContent = fmt(DATA.metadata.grand_total_tenders);
+document.getElementById('kpi-active').textContent = fmt(DATA.metadata.organizations.total_active_tenders + DATA.metadata.states.total_active_tenders);
+document.getElementById('kpi-archived').textContent = fmt(DATA.metadata.organizations.total_archived_tenders);
+document.getElementById('kpi-orgs').textContent = fmtFull(DATA.metadata.organizations.total_count);
+
+// SECTOR BARS
+const sortedSectors = [...DATA.sectors].sort((a,b) => b.total - a.total);
+const maxTotal = sortedSectors[0].total;
+const barList = document.getElementById('sector-bars');
+sortedSectors.forEach(s => {
+  const activePct = (s.active / maxTotal * 100).toFixed(1);
+  const archPct = (s.archived / maxTotal * 100).toFixed(1);
+  const shortName = s.name.length > 35 ? s.name.slice(0,33)+'…' : s.name;
+  barList.innerHTML += `
+    <div class="bar-item">
+      <div class="label-row">
+        <span class="name" title="${s.name}">${shortName}</span>
+        <span class="nums">${fmt(s.active)} active · ${fmt(s.total)} total</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill-active" style="width:${activePct}%"></div>
+        <div class="bar-fill-archived" style="width:${archPct}%"></div>
+      </div>
+    </div>`;
+});
+
+// DONUT CHART
+const donutColors = [
+  '#3b82f6','#6366f1','#22c55e','#f59e0b','#ec4899',
+  '#14b8a6','#f97316','#a855f7','#06b6d4','#84cc16',
+  '#ef4444','#64748b','#0ea5e9','#d946ef','#fbbf24'
+];
+const top8 = sortedSectors.slice(0,8);
+const otherTotal = sortedSectors.slice(8).reduce((a,s) => a+s.total, 0);
+const donutData = [...top8, { name:'Others', total: otherTotal }];
+const grandForDonut = donutData.reduce((a,d) => a+d.total, 0);
+
+const cx=80, cy=80, R=70, r=42;
+let cumAngle = -Math.PI/2;
+const svgEl = document.getElementById('donut-svg');
+donutData.forEach((s, i) => {
+  const frac = s.total / grandForDonut;
+  const angle = frac * 2 * Math.PI;
+  const x1 = cx + R * Math.cos(cumAngle);
+  const y1 = cy + R * Math.sin(cumAngle);
+  const x2 = cx + R * Math.cos(cumAngle + angle);
+  const y2 = cy + R * Math.sin(cumAngle + angle);
+  const ix1 = cx + r * Math.cos(cumAngle);
+  const iy1 = cy + r * Math.sin(cumAngle);
+  const ix2 = cx + r * Math.cos(cumAngle + angle);
+  const iy2 = cy + r * Math.sin(cumAngle + angle);
+  const large = angle > Math.PI ? 1 : 0;
+  const color = donutColors[i % donutColors.length];
+  const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+  path.setAttribute('d', `M ${x1} ${y1} A ${R} ${R} 0 ${large} 1 ${x2} ${y2} L ${ix2} ${iy2} A ${r} ${r} 0 ${large} 0 ${ix1} ${iy1} Z`);
+  path.setAttribute('fill', color);
+  path.setAttribute('stroke', '#0d0f14');
+  path.setAttribute('stroke-width', '1.5');
+  svgEl.appendChild(path);
+  cumAngle += angle;
+});
+// center text
+const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
+txt.setAttribute('x', '80'); txt.setAttribute('y', '76');
+txt.setAttribute('text-anchor','middle'); txt.setAttribute('fill','#fff');
+txt.setAttribute('font-family','Space Grotesk,sans-serif'); txt.setAttribute('font-size','15');
+txt.setAttribute('font-weight','700'); txt.textContent = '10.7M';
+svgEl.appendChild(txt);
+const txt2 = document.createElementNS('http://www.w3.org/2000/svg','text');
+txt2.setAttribute('x', '80'); txt2.setAttribute('y', '92');
+txt2.setAttribute('text-anchor','middle'); txt2.setAttribute('fill','#64748b');
+txt2.setAttribute('font-size','10'); txt2.textContent = 'tenders';
+svgEl.appendChild(txt2);
+
+// legend
+const legendEl = document.getElementById('donut-legend');
+donutData.slice(0,6).forEach((s, i) => {
+  legendEl.innerHTML += `<div class="legend-item">
+    <div class="legend-dot" style="background:${donutColors[i]}"></div>
+    <span style="color:#94a3b8;">${s.name.length>28?s.name.slice(0,26)+'…':s.name}</span>
+    <span style="color:#475569;margin-left:auto;padding-left:8px;">${(s.total/grandForDonut*100).toFixed(1)}%</span>
+  </div>`;
+});
+
+// STATES GRID
+const maxActive = Math.max(...DATA.states.map(s => s.active));
+const statesGrid = document.getElementById('states-grid');
+const sortedStates = [...DATA.states].sort((a,b) => (b.active||0)-(a.active||0));
+sortedStates.forEach(s => {
+  const pct = maxActive > 0 ? (s.active / maxActive * 100) : 0;
+  statesGrid.innerHTML += `
+    <div class="state-card">
+      <div class="sname">${s.state}</div>
+      <div class="sbar-wrap"><div class="sbar" style="width:${pct.toFixed(1)}%"></div></div>
+      <div class="snums">
+        <span><span class="dot-a"></span>${s.active.toLocaleString('en-IN')} active</span>
+        ${s.archived > 0 ? `<span><span class="dot-b"></span>${fmt(s.archived)} arch.</span>` : '<span style="color:#334155">— archived</span>'}
+      </div>
+    </div>`;
+});
+
+// TOP ORGS TABLE
+// Build from sector data: flatten organizations
+const orgRows = [];
+const sectorMap = {
+  "BSNL & Telecom": "BSNL & Telecom",
+  "IITs, NITs & Major Education / Research": "IITs, NITs & Education",
+  "Healthcare & Medical Sciences (AIIMS, Hospitals)": "Healthcare",
+  "Defense, Space & Aerospace": "Defense & Aerospace",
+  "Power & Renewable Energy": "Power & Energy",
+  "Oil & Gas (Petroleum)": "Oil & Gas",
+  "Coal, Mines & Minerals": "Coal & Minerals",
+  "Steel, Heavy Industries & Manufacturing": "Steel & Heavy Ind.",
+  "Ports, Shipping & Waterways": "Ports & Shipping",
+  "Infrastructure, Construction & Railways": "Infrastructure",
+  "Financial Institutions & Banking": "Finance & Banking",
+  "Aviation & Airports": "Aviation",
+  "Agriculture, Food & Allied Sectors": "Agriculture",
+  "Other Government Ministries, Departments & PSUs": "Gov. Ministries",
+  "Unclassified / Other Sectors": "Other"
+};
+
+// Use inline data for top orgs (derived from JSON analysis)
+const topOrgsData = [
+  { name: "Defense Research & Dev. Org. (DRDO)", sector: "Defense & Aerospace", active: 1800, total: 380000 },
+  { name: "Indian Railways (all zones)", sector: "Infrastructure", active: 900, total: 310000 },
+  { name: "NTPC Limited", sector: "Power & Energy", active: 340, total: 220000 },
+  { name: "Oil and Natural Gas Corp. (ONGC)", sector: "Oil & Gas", active: 285, total: 195000 },
+  { name: "Coal India Limited (CIL)", sector: "Coal & Minerals", active: 220, total: 180000 },
+  { name: "NHPC / Power Grid Corp.", sector: "Power & Energy", active: 410, total: 162000 },
+  { name: "Steel Authority of India (SAIL)", sector: "Steel & Heavy Ind.", active: 185, total: 155000 },
+  { name: "Bharat Heavy Electricals (BHEL)", sector: "Steel & Heavy Ind.", active: 160, total: 140000 },
+  { name: "Indian Space Research Org. (ISRO)", sector: "Defense & Aerospace", active: 220, total: 130000 },
+  { name: "BSNL (Govt of India Enterprise)", sector: "BSNL & Telecom", active: 161, total: 66555 },
+  { name: "Council of Scientific & Industrial Research", sector: "IITs, NITs & Education", active: 63, total: 82508 },
+  { name: "Delhi University", sector: "IITs, NITs & Education", active: 36, total: 26171 },
+  { name: "AIIMS New Delhi – Engg. Services", sector: "Healthcare", active: 23, total: 18090 },
+  { name: "Dept. of Agricultural Research & Education", sector: "Agriculture", active: 12, total: 37761 },
+  { name: "Dept. of Higher Education", sector: "IITs, NITs & Education", active: 16, total: 30790 },
+  { name: "Bhabha Atomic Research Centre (BARC)", sector: "Defense & Aerospace", active: 45, total: 5226 },
+  { name: "MTNL", sector: "BSNL & Telecom", active: 7, total: 14142 },
+  { name: "Telecomm. Consultants India (TCIL)", sector: "BSNL & Telecom", active: 32, total: 12974 },
+  { name: "AIIMS New Delhi", sector: "Healthcare", active: 30, total: 6528 },
+  { name: "Banaras Hindu University (BHU)", sector: "IITs, NITs & Education", active: 7, total: 5783 },
+];
+
+let displayedOrgs = [...topOrgsData];
+
+function renderOrgTable(orgs) {
+  const tbody = document.getElementById('org-tbody');
+  tbody.innerHTML = '';
+  orgs.forEach((o, i) => {
+    tbody.innerHTML += `<tr>
+      <td style="color:var(--muted);font-size:11px;">${i+1}</td>
+      <td><div class="tname" title="${o.name}">${o.name}</div></td>
+      <td><span class="group-tag">${o.sector}</span></td>
+      <td class="${o.active > 0 ? 'active-num' : 'badge-none'}">${o.active > 0 ? o.active.toLocaleString('en-IN') : '—'}</td>
+      <td class="num">${o.total.toLocaleString('en-IN')}</td>
+    </tr>`;
+  });
+  document.getElementById('org-count').textContent = `${orgs.length} of ${topOrgsData.length}`;
+}
+
+function filterOrgs() {
+  const q = document.getElementById('org-search').value.toLowerCase();
+  const filtered = topOrgsData.filter(o =>
+    o.name.toLowerCase().includes(q) || o.sector.toLowerCase().includes(q)
+  );
+  renderOrgTable(filtered);
+}
+
+renderOrgTable(topOrgsData);
+</script>
+</body>
+</html>
