@@ -1,0 +1,81 @@
+name: Concurrently Scrape Tenders
+
+on:
+  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+
+jobs:
+  scrape_matrix:
+    name: Scrape Partition
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Spin up 10 parallel runner VMs
+        job_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests beautifulsoup4
+
+    - name: Run Scraper Partition
+      run: |
+        # Each matrix job scrapes only its load-balanced slice of tasks
+        python run_partition.py --job-index ${{ matrix.job_index }} --total-jobs 10
+
+    - name: Upload Scraped Partition Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: partition-data-${{ matrix.job_index }}
+        path: results/
+        retention-days: 2
+
+  consolidate:
+    name: Consolidate & Push Results
+    needs: scrape_matrix
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Download All Partition Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        path: temp_artifacts/
+
+    - name: Merge Artifacts into Repo
+      run: |
+        echo "Merging downloaded partitions..."
+        mkdir -p results
+        # Copy files from all temp_artifacts/partition-data-X/ directories into results/
+        if [ -d "temp_artifacts" ]; then
+          cp -r temp_artifacts/partition-data-*/* results/ 2>/dev/null || true
+          rm -rf temp_artifacts
+        fi
+        
+    - name: Commit and Push to Main
+      run: |
+        git config --global user.name "Github Scrape Bot"
+        git config --global user.email "bot@github.com"
+        
+        # Add the results folder
+        git add results/
+        
+        # Check if there are changes to commit
+        if git diff --cached --quiet; then
+          echo "No new data to commit."
+        else
+          git commit -m "Merge scraped results from all partitions"
+          # Pull latest changes from remote origin to avoid conflicts, then push
+          git pull --rebase origin main
+          git push origin main
+        fi

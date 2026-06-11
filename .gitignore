@@ -1,0 +1,14 @@
+# Ignore all top-level directories (like local scrape folders)
+/*/
+
+# Except the .github folder (for our GHA workflow)
+!/.github/
+
+# Ignore SQLite databases, logs, caches
+*.db
+*.db-journal
+*.db-wal
+*.log
+__pycache__/
+results/
+tender_counts_cache.json
