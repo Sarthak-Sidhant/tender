@@ -176,16 +176,23 @@ def main():
     total_state_active = 0
     total_state_archived = 0
     
+    # Deduplicate cache keys: prefer 3-part keys over 2-part legacy keys
+    deduped_cache = {}
     for key, count in cache.items():
         if count is None:
             continue
         parts = key.split("||")
-        # Support both old cache key style (name||status) and new style (name||status||type)
         if len(parts) == 2:
             name, status = parts
-            ptype = "org" # Fallback/Default for legacy cache entries
+            new_key = f"{name}||{status}||org"
+            if new_key not in cache:
+                deduped_cache[new_key] = count
         else:
-            name, status, ptype = parts
+            deduped_cache[key] = count
+
+    for key, count in deduped_cache.items():
+        parts = key.split("||")
+        name, status, ptype = parts
             
         if ptype == "org":
             if name not in org_aggregation:

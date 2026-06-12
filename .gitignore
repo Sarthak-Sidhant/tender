@@ -1,8 +1,9 @@
 # Ignore all top-level directories (like local scrape folders)
 /*/
 
-# Except the .github folder (for our GHA workflow)
+# Except the .github folder (for our GHA workflow) and org/ (pre-downloaded data)
 !/.github/
+!/org/
 
 # Ignore SQLite databases, logs, caches
 *.db

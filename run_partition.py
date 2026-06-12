@@ -88,17 +88,6 @@ def load_hashes_and_weights():
         weight = math.ceil(count / 10.0) if count > 0 else 1
         tasks.append({"name": org, "hash": info["hash"], "status": "archived", "type": "org", "weight": weight})
 
-    # 2. Add state tasks
-    for state, info in active_states.items():
-        count = weights["states"].get(state, {}).get("active", 0)
-        weight = math.ceil(count / 10.0) if count > 0 else 1
-        tasks.append({"name": state, "hash": info["hash"], "status": "active", "type": "state", "weight": weight})
-        
-    for state, info in archived_states.items():
-        count = weights["states"].get(state, {}).get("archived", 0)
-        weight = math.ceil(count / 10.0) if count > 0 else 1
-        tasks.append({"name": state, "hash": info["hash"], "status": "archived", "type": "state", "weight": weight})
-        
     return tasks
 
 def distribute_tasks_greedy(tasks, total_jobs):
@@ -258,10 +247,12 @@ def scrape_task(task, headers):
     endpoint = "statedata" if ptype == "state" else "cpppdata"
     
     clean_name_dir = clean_filename(name)
+    import hashlib
+    name_hash = hashlib.md5(name.encode("utf-8")).hexdigest()[:8]
     output_dir = os.path.join("results", ptype, status)
     os.makedirs(output_dir, exist_ok=True)
     
-    output_file = os.path.join(output_dir, f"{clean_name_dir}.json")
+    output_file = os.path.join(output_dir, f"{clean_name_dir}_{name_hash}.json")
     
     # Check if a local version exists (e.g. org/Name/status.json or state/Name/status.json)
     local_paths = [
@@ -287,6 +278,7 @@ def scrape_task(task, headers):
     session.cookies.set("cookieWorked", "yes", domain="eprocure.gov.in", path="/")
     
     all_records = []
+    seen_internal_ids = set()
     page_num = 0
     consecutive_no_new = 0
     failed_attempts = 0
@@ -294,6 +286,18 @@ def scrape_task(task, headers):
     logger.info(f"Scraping '{name}' [{status}] ({ptype})")
     
     while True:
+        if time.time() - START_TIME > MAX_RUN_TIME:
+            logger.warning(f"Approaching 6-hour limit. Stopping crawl for '{name}' at page {page_num} to preserve cached progress.")
+            with FAILED_PAGES_LOCK:
+                FAILED_PAGES_LIST.append({
+                    "name": name,
+                    "hash": b64_hash,
+                    "status": status,
+                    "type": ptype,
+                    "page": page_num
+                })
+            break
+
         if page_num == 1:
             page_num += 1
             continue
@@ -326,13 +330,17 @@ def scrape_task(task, headers):
             logger.info(f"Reached end of records (empty page) for '{name}' at page {page_num}.")
             break
             
-        # Avoid duplicate entries on parsing
-        new_records = []
+        # Keep track of seen IDs only for page-loop termination detection
+        has_new = False
         for r in records:
-            if r["internal_id"] not in [x["internal_id"] for x in all_records]:
-                new_records.append(r)
+            internal_id = r["internal_id"]
+            if internal_id not in seen_internal_ids:
+                seen_internal_ids.add(internal_id)
+                has_new = True
                 
-        if not new_records:
+        all_records.extend(records)
+                
+        if not has_new:
             consecutive_no_new += 1
             # Allow up to 12 consecutive pages with duplicate records before concluding we hit the end
             if consecutive_no_new >= 12:
@@ -340,7 +348,6 @@ def scrape_task(task, headers):
                 break
         else:
             consecutive_no_new = 0
-            all_records.extend(new_records)
             
         if len(records) < 10:
             logger.info(f"Reached last page (less than 10 records: {len(records)}) for '{name}' at page {page_num}.")
@@ -385,8 +392,10 @@ def retry_failed_pages_in_partition(failed_items, headers):
             if records:
                 # Merge into the existing JSON file
                 clean_name_dir = clean_filename(name)
+                import hashlib
+                name_hash = hashlib.md5(name.encode("utf-8")).hexdigest()[:8]
                 output_dir = os.path.join("results", ptype, status)
-                output_file = os.path.join(output_dir, f"{clean_name_dir}.json")
+                output_file = os.path.join(output_dir, f"{clean_name_dir}_{name_hash}.json")
                 
                 existing_records = []
                 if os.path.exists(output_file):
