@@ -251,6 +251,21 @@ def scrape_task(task, headers):
     
     output_file = os.path.join(output_dir, f"{clean_name_dir}.json")
     
+    # Check if a local version exists (e.g. org/Name/status.json or state/Name/status.json)
+    local_paths = [
+        os.path.join(ptype, name, f"{status}.json"),
+        os.path.join(ptype, clean_name_dir, f"{status}.json")
+    ]
+    for local_path in local_paths:
+        if os.path.exists(local_path):
+            logger.info(f"Found local data for {name} ({status}) at {local_path}. Copying to results...")
+            import shutil
+            try:
+                shutil.copy2(local_path, output_file)
+                return
+            except Exception as e:
+                logger.error(f"Failed to copy local data from {local_path}: {e}")
+
     # If already scraped in a previous run, skip
     if os.path.exists(output_file):
         logger.info(f"[{ptype}][{status}] {name} already exists. Skipping.")
