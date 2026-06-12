@@ -9,11 +9,11 @@
         "states": {
             "total_count": 35,
             "total_active_tenders": 48594,
-            "total_archived_tenders": 126118,
-            "total_tenders": 174712
+            "total_archived_tenders": 725961,
+            "total_tenders": 774555
         },
-        "grand_total_tenders": 10687043,
-        "timestamp": "2026-06-11T11:50:42Z"
+        "grand_total_tenders": 11286886,
+        "timestamp": "2026-06-11T20:46:34Z"
     },
     "organizations": {
         "All India Institute of Medical Science-New Delhi": {
@@ -11780,8 +11780,8 @@
         },
         "Andhra Pradesh": {
             "active": 2614,
-            "archived": 0,
-            "total": 2614
+            "archived": 499262,
+            "total": 501876
         },
         "Andaman and Nicobar Island": {
             "active": 115,
@@ -11805,8 +11805,8 @@
         },
         "Chandigarh UT": {
             "active": 369,
-            "archived": 0,
-            "total": 369
+            "archived": 100581,
+            "total": 100950
         },
         "Daman and Diu": {
             "active": 15,

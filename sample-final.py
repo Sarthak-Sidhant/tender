@@ -72,10 +72,19 @@ def main():
         for row in rows:
             cells = row.find_all(["td", "th"])
             cell_texts = [c.get_text(separator=" ", strip=True) for c in cells]
-            if len(cell_texts) == 2:
+            
+            # Extract key-value pairs separated by a ":" element
+            found_pair = False
+            for i in range(1, len(cell_texts) - 1):
+                if cell_texts[i] == ":":
+                    key = cell_texts[i-1]
+                    val = cell_texts[i+1]
+                    print(f"{key:<30} : {val}")
+                    found_pair = True
+            
+            # Fallback for simple 2-cell rows without an explicit ":" cell
+            if not found_pair and len(cell_texts) == 2:
                 print(f"{cell_texts[0]:<30} : {cell_texts[1]}")
-            elif len(cell_texts) > 2 and cell_texts[1] == ":":
-                print(f"{cell_texts[0]:<30} : {cell_texts[2]}")
     print("=" * 60)
 
 if __name__ == "__main__":

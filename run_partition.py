@@ -311,10 +311,12 @@ def scrape_task(task, headers):
             
         page_num += 1
 
-    if all_records:
+    if all_records and failed_attempts == 0:
         with open(output_file, "w", encoding="utf-8") as f:
             json.dump(all_records, f, indent=4, ensure_ascii=False)
         logger.info(f"Saved {len(all_records)} records for {name} to {output_file}")
+    elif failed_attempts > 0:
+        logger.error(f"Failed to scrape all pages successfully for {name} due to {failed_attempts} page failures. Output file NOT saved to ensure data integrity.")
     else:
         logger.info(f"No records found for {name}")
 

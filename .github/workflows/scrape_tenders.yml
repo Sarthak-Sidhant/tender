@@ -10,8 +10,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        # Spin up 10 parallel runner VMs
-        job_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        # Spin up 20 parallel runner VMs
+        job_index: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19]
     
     steps:
     - name: Checkout repository
@@ -26,7 +26,7 @@ jobs:
       run: pip install requests beautifulsoup4
 
     - name: Restore cache for partition results
-      uses: actions/cache@v4
+      uses: actions/cache/restore@v4
       with:
         path: results/
         key: tenders-results-${{ matrix.job_index }}-${{ github.run_id }}
@@ -34,11 +34,20 @@ jobs:
           tenders-results-${{ matrix.job_index }}-
 
     - name: Run Scraper Partition
+      timeout-minutes: 330  # Timeout step at 5.5 hours, leaving time for cache save and uploads
       run: |
         # Each matrix job scrapes only its load-balanced slice of tasks
-        python run_partition.py --job-index ${{ matrix.job_index }} --total-jobs 10
+        python run_partition.py --job-index ${{ matrix.job_index }} --total-jobs 20
+
+    - name: Save cache for partition results
+      if: always()
+      uses: actions/cache/save@v4
+      with:
+        path: results/
+        key: tenders-results-${{ matrix.job_index }}-${{ github.run_id }}
 
     - name: Upload Scraped Partition Artifact
+      if: always()
       uses: actions/upload-artifact@v4
       with:
         name: partition-data-${{ matrix.job_index }}
@@ -48,6 +57,7 @@ jobs:
   consolidate:
     name: Consolidate & Push Results
     needs: scrape_matrix
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     steps:
     - name: Checkout repository
@@ -75,8 +85,8 @@ jobs:
         git config --global user.name "Github Scrape Bot"
         git config --global user.email "bot@github.com"
         
-        # Add the results folder
-        git add results/
+        # Add the results folder (-f is required since results/ is in .gitignore)
+        git add -f results/
         
         # Check if there are changes to commit
         if git diff --cached --quiet; then
