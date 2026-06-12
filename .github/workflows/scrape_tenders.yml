@@ -79,7 +79,33 @@ jobs:
           cp -r temp_artifacts/partition-data-*/* results/ 2>/dev/null || true
           rm -rf temp_artifacts
         fi
+
+    - name: Consolidate Failed Pages
+      run: |
+        python -c '
+        import os, glob, json
+        all_failed = []
+        files = glob.glob("results/failed_pages_*.json")
+        for f in files:
+            try:
+                with open(f, "r", encoding="utf-8") as file:
+                    data = json.load(file)
+                    all_failed.extend(data)
+                os.remove(f)
+            except Exception as e:
+                print(f"Error merging {f}: {e}")
         
+        # Write to failed_pages.json at root level
+        if all_failed:
+            with open("failed_pages.json", "w", encoding="utf-8") as file:
+                json.dump(all_failed, file, indent=4, ensure_ascii=False)
+            print(f"Consolidated {len(all_failed)} failed pages into failed_pages.json")
+        elif os.path.exists("failed_pages.json"):
+            # If no failed pages, clear the file
+            os.remove("failed_pages.json")
+            print("No failed pages. Cleared failed_pages.json")
+        '
+
     - name: Commit and Push to Main
       run: |
         git config --global user.name "Github Scrape Bot"
@@ -87,6 +113,7 @@ jobs:
         
         # Add the results folder (-f is required since results/ is in .gitignore)
         git add -f results/
+        git add failed_pages.json 2>/dev/null || true
         
         # Check if there are changes to commit
         if git diff --cached --quiet; then

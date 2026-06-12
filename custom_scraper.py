@@ -1,13 +1,8 @@
 #!/usr/bin/env python3
 """
-eprocure.gov.in CPPP Tender Scraper (Direct Scrape via Pre-generated Hashes)
-Uses pre-generated search hashes to directly scrape tender records without CAPTCHA.
-Supports:
-- Concurrency (ThreadPoolExecutor) for faster downloads
-- Resiliency (Retries with Exponential Backoff)
-- Rate limiting / Jittered delays
-- State persistence (SQLite-based checkpointing & resumption)
-- Dual storage: Saves to both SQLite database and directory-based JSON files
+Custom Central Tenders Scraper
+Scrapes ONLY active tenders for organizations (not states)
+Saves output directory structure inside "Central Organizations/" instead of the root directory.
 """
 
 import os
@@ -30,19 +25,20 @@ logging.basicConfig(
     format="%(asctime)s [%(levelname)s] [%(threadName)s] %(message)s",
     handlers=[
         logging.StreamHandler(sys.stdout),
-        logging.FileHandler("scraper.log", encoding="utf-8")
+        logging.FileHandler("custom_scraper.log", encoding="utf-8")
     ]
 )
-logger = logging.getLogger("TenderScraper")
+logger = logging.getLogger("CentralScraper")
 
 # Global Configuration
 DB_FILE = "tenders.db"
 DB_LOCK = threading.Lock()
-MAX_THREADS = 5  # Adjust based on system/network limits (keep moderate to avoid IP bans)
+MAX_THREADS = 8  # Moderate concurrency to keep performance good but avoid blocks
 MAX_RETRIES = 5
 BACKOFF_FACTOR = 2
-MIN_DELAY = 0.5
-MAX_DELAY = 1.5
+MIN_DELAY = 0.4
+MAX_DELAY = 1.2
+OUTPUT_DIR_BASE = "Central Organizations"
 
 def clean_filename(name):
     """Replaces characters that are invalid in folder/file names."""
@@ -54,16 +50,8 @@ def init_db():
     """Initializes the SQLite database with WAL mode and necessary tables."""
     with DB_LOCK:
         conn = sqlite3.connect(DB_FILE, timeout=30.0)
-        # Enable Write-Ahead Logging for better concurrency
         conn.execute("PRAGMA journal_mode=WAL;")
         cursor = conn.cursor()
-        
-        # Check if we need to migrate/recreate because of new schema
-        cursor.execute("PRAGMA table_info(tenders)")
-        cols = [row[1] for row in cursor.fetchall()]
-        if cols and 'internal_id' not in cols:
-            cursor.execute("DROP TABLE tenders")
-            cursor.execute("DROP INDEX IF EXISTS idx_tenders_org_status")
         
         # Table for storing tenders
         cursor.execute("""
@@ -233,7 +221,6 @@ def parse_tenders_from_html(html_content):
                     payload = detail_url.split("/tendersfullview/")[-1]
                     url_parts = payload.split("A13h1")
                     if url_parts:
-                        # Helper for padded b64 decoding
                         def decode_b64(s):
                             s = s.strip()
                             s += "=" * ((4 - len(s) % 4) % 4)
@@ -290,8 +277,6 @@ def fetch_page_with_retry(session, url, headers):
     while retries < MAX_RETRIES:
         try:
             res = session.get(url, headers=headers, timeout=20)
-            
-            # If rate limited (429) or server error (5xx), apply backoff
             if res.status_code == 429:
                 sleep_time = (BACKOFF_FACTOR ** retries) + random.uniform(1, 3)
                 logger.warning(f"Rate limited (429). Retrying in {sleep_time:.2f}s...")
@@ -304,7 +289,6 @@ def fetch_page_with_retry(session, url, headers):
                 time.sleep(sleep_time)
                 retries += 1
                 continue
-                
             return res
         except (requests.exceptions.RequestException, requests.exceptions.Timeout) as e:
             sleep_time = (BACKOFF_FACTOR ** retries) + random.uniform(1, 3)
@@ -316,10 +300,9 @@ def fetch_page_with_retry(session, url, headers):
     return None
 
 def scrape_organisation(org, info, status_name, headers):
-    """Scrapes all pages of tenders for a single organisation/status combination."""
+    """Scrapes active tenders for a single organisation."""
     b64_hash = info["hash"]
     session = requests.Session()
-    # Configure required session cookies
     session.cookies.set("cookieWorked", "yes", domain="eprocure.gov.in", path="/")
     
     all_records = []
@@ -335,8 +318,6 @@ def scrape_organisation(org, info, status_name, headers):
             continue
             
         url = f"https://eprocure.gov.in/cppp/tendersearch/cpppdata/{b64_hash}?page={page_num}"
-        
-        # Apply jittered delay between requests to be gentle on the server
         time.sleep(random.uniform(MIN_DELAY, MAX_DELAY))
         
         res = fetch_page_with_retry(session, url, headers)
@@ -366,7 +347,6 @@ def scrape_organisation(org, info, status_name, headers):
             logger.info(f"Reached end of records (empty page) for '{org}' at page {page_num}.")
             break
             
-        # Extract new records, skipping any that are already seen
         new_records = []
         for r in records:
             if r["internal_id"] not in [x["internal_id"] for x in all_records]:
@@ -374,7 +354,6 @@ def scrape_organisation(org, info, status_name, headers):
                 
         if not new_records:
             consecutive_no_new += 1
-            # Allow up to 12 consecutive pages with duplicate records before concluding we hit the end
             if consecutive_no_new >= 12:
                 logger.info(f"Stopping pagination for {org}: encountered 12 consecutive pages of duplicates.")
                 break
@@ -391,17 +370,17 @@ def scrape_organisation(org, info, status_name, headers):
 
     # Save Results
     if all_records:
-        # Save to DB
+        # Save to SQLite DB
         save_tenders_to_db(all_records, status_name)
         
-        # Save to JSON File
-        org_dir = clean_filename(org)
+        # Save to JSON File inside Central Organizations/ directory
+        org_dir = os.path.join(OUTPUT_DIR_BASE, clean_filename(org))
         os.makedirs(org_dir, exist_ok=True)
         json_file = os.path.join(org_dir, f"{status_name}.json")
         with open(json_file, "w", encoding="utf-8") as f:
             json.dump(all_records, f, indent=4, ensure_ascii=False)
             
-        logger.info(f"Finished '{org}' [{status_name}]: Saved {len(all_records)} records (DB & JSON)")
+        logger.info(f"Finished '{org}' [{status_name}]: Saved {len(all_records)} records (DB & JSON under {OUTPUT_DIR_BASE})")
         update_progress(org, status_name, page_num + 1, len(all_records), completed=1)
     else:
         logger.info(f"Finished '{org}' [{status_name}]: No records found.")
@@ -438,7 +417,7 @@ def retry_failed_pages(headers):
                 save_tenders_to_db(records, status_name)
                 
                 # Update local JSON file
-                org_dir = clean_filename(org)
+                org_dir = os.path.join(OUTPUT_DIR_BASE, clean_filename(org))
                 os.makedirs(org_dir, exist_ok=True)
                 json_file = os.path.join(org_dir, f"{status_name}.json")
                 
@@ -478,39 +457,29 @@ def retry_failed_pages(headers):
                 conn.close()
 
 def main():
-    # Load hashes
+    # Load active organization hashes ONLY (central tenders)
     active_hashes = {}
-    archived_hashes = {}
-    
     if os.path.exists("active_hashes.json"):
         with open("active_hashes.json", "r", encoding="utf-8") as f:
             active_hashes = json.load(f)
             
-    if os.path.exists("archived_hashes.json"):
-        with open("archived_hashes.json", "r", encoding="utf-8") as f:
-            archived_hashes = json.load(f)
-            
-    all_targets = []
-    for org, info in active_hashes.items():
-        all_targets.append((org, info, "active"))
-    for org, info in archived_hashes.items():
-        all_targets.append((org, info, "archived"))
-        
-    if not all_targets:
-        logger.error("No active_hashes.json or archived_hashes.json files found. Run generate_hashes.py first.")
+    if not active_hashes:
+        logger.error("No active_hashes.json file found. Run generate_hashes.py first.")
         sys.exit(1)
         
-    # Initialize SQLite Database
+    os.makedirs(OUTPUT_DIR_BASE, exist_ok=True)
     init_db()
     
     # Filter out already completed tasks for checkpoint resumption
     completed_tasks = get_completed_tasks()
+    
+    all_targets = [(org, info, "active") for org, info in active_hashes.items()]
     remaining_targets = [
         (org, info, status) for org, info, status in all_targets
         if (org, status) not in completed_tasks
     ]
     
-    logger.info(f"Total tasks: {len(all_targets)}. Already completed: {len(completed_tasks)}. Remaining tasks to scrape: {len(remaining_targets)}")
+    logger.info(f"Total Central Active tasks: {len(all_targets)}. Already completed: {len(completed_tasks)}. Remaining tasks to scrape: {len(remaining_targets)}")
     
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
@@ -518,7 +487,6 @@ def main():
         "Accept-Language": "en-US,en;q=0.5"
     }
     
-    # Run Scrapers concurrently using ThreadPoolExecutor
     if remaining_targets:
         with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
             futures = {
@@ -532,10 +500,9 @@ def main():
                     future.result()
                 except Exception as exc:
                     logger.error(f"Organisation '{org}' [{status}] generated an exception: {exc}")
-                    # Mark task as failed/incomplete in progress table
                     update_progress(org, status, 0, 0, completed=0)
 
-    logger.info("Scraping operation finished.")
+    logger.info("Custom Scraping operation finished.")
     
     # Retry failed pages
     retry_failed_pages(headers)
