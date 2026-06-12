@@ -1,0 +1,57 @@
+name: Test Resiliency Scraper
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test_scrape:
+    name: Run Test Scrape
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: pip install requests beautifulsoup4
+
+    - name: Run Test Scraper
+      run: |
+        python run_partition.py --job-index 0 --total-jobs 1 --test
+
+    - name: Consolidate Test Failed Pages
+      run: |
+        python -c '
+        import os, glob, json
+        all_failed = []
+        files = glob.glob("results/failed_pages_*.json")
+        for f in files:
+            try:
+                with open(f, "r", encoding="utf-8") as file:
+                    data = json.load(file)
+                    all_failed.extend(data)
+                os.remove(f)
+            except Exception as e:
+                print(f"Error merging {f}: {e}")
+        
+        if all_failed:
+            with open("failed_pages.json", "w", encoding="utf-8") as file:
+                json.dump(all_failed, file, indent=4, ensure_ascii=False)
+            print(f"Consolidated {len(all_failed)} failed pages into failed_pages.json")
+        elif os.path.exists("failed_pages.json"):
+            os.remove("failed_pages.json")
+            print("No failed pages. Cleared failed_pages.json")
+        '
+
+    - name: Upload Test Results Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          results/
+          failed_pages.json
+        retention-days: 1

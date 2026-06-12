@@ -35,6 +35,9 @@ import threading
 FAILED_PAGES_LOCK = threading.Lock()
 FAILED_PAGES_LIST = []
 
+TEST_MODE = False
+IS_RETRY_PHASE = False
+
 def clean_filename(name):
     for char in ['/', '\\', ':', '*', '?', '"', '<', '>', '|']:
         name = name.replace(char, '_')
@@ -221,6 +224,11 @@ def parse_tenders_from_html(html_content):
     return records
 
 def fetch_page_with_retry(session, url, headers):
+    global TEST_MODE, IS_RETRY_PHASE
+    if TEST_MODE and not IS_RETRY_PHASE and "page=0" in url:
+        logger.warning(f"[TEST MODE] Simulating network timeout for: {url}")
+        return None
+        
     retries = 0
     while retries < MAX_RETRIES:
         try:
@@ -350,6 +358,8 @@ def scrape_task(task, headers):
         logger.info(f"No records found for {name}")
 
 def retry_failed_pages_in_partition(failed_items, headers):
+    global IS_RETRY_PHASE
+    IS_RETRY_PHASE = True
     if not failed_items:
         return []
     logger.info(f"Retrying {len(failed_items)} failed pages for this partition...")
@@ -404,6 +414,7 @@ def main():
     parser = argparse.ArgumentParser(description="Load-balanced concurrent CPPP tender scraper partition.")
     parser.add_argument("--job-index", type=int, required=True, help="Index of the GHA runner (0-based)")
     parser.add_argument("--total-jobs", type=int, required=True, help="Total parallel GHA runners")
+    parser.add_argument("--test", action="store_true", help="Run in test mode with a small task batch and simulated failure")
     args = parser.parse_args()
     
     headers = {
@@ -418,7 +429,17 @@ def main():
     
     my_bin = bins[args.job_index]
     my_tasks = my_bin["tasks"]
-    my_weight = my_bin["total_weight"]
+    
+    if args.test:
+        global TEST_MODE
+        TEST_MODE = True
+        # Find small tasks with weight == 1 (1 page)
+        small_tasks = [t for t in my_tasks if t.get("weight", 1) == 1]
+        if not small_tasks:
+            small_tasks = my_tasks[:2]
+        my_tasks = small_tasks[:2]
+        
+    my_weight = sum(t["weight"] for t in my_tasks)
     
     # Load previously failed pages that belong to this runner's tasks
     my_failed_pages = []
