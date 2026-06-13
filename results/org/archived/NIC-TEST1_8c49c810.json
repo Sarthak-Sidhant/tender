@@ -1,0 +1,41 @@
+[
+    {
+        "serial_number": 1,
+        "title": "chk flow epublish",
+        "reference_number": "Test tender epublish",
+        "tender_id": "2016_NICTS_88949_1",
+        "internal_id": "2735664",
+        "e_published_date": "22-Feb-2016 04:15 PM",
+        "bid_submission_closing_date": "22-Feb-2016 04:30 PM",
+        "tender_opening_date": "22-Feb-2016 04:30 PM",
+        "organisation_name": "NIC-TEST1",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjczNTY2NA==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMwNzM2NQ==A13h1VGVzdCB0ZW5kZXIgZXB1Ymxpc2g=A13h1MjAxNl9OSUNUU184ODk0OV8x",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 2,
+        "title": "chk flwow",
+        "reference_number": "chk flow",
+        "tender_id": "2017_NICTS_221997_1",
+        "internal_id": "3978154",
+        "e_published_date": "13-Jun-2017 09:00 AM",
+        "bid_submission_closing_date": "13-Jun-2017 09:10 AM",
+        "tender_opening_date": "13-Jun-2017 09:10 AM",
+        "organisation_name": "NIC-TEST1",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/Mzk3ODE1NA==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMwNzM2NQ==A13h1Y2hrIGZsb3c=A13h1MjAxN19OSUNUU18yMjE5OTdfMQ==",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/Y2hrIGZsb3c=A13h1MjAxN19OSUNUU18yMjE5OTdfMQ=="
+    },
+    {
+        "serial_number": 3,
+        "title": "testing by spp two",
+        "reference_number": "2024-Testsppteam-002",
+        "tender_id": "2024_NICTS_740423_1",
+        "internal_id": "11451390",
+        "e_published_date": "04-Jan-2024 01:00 PM",
+        "bid_submission_closing_date": "04-Jan-2024 01:25 PM",
+        "tender_opening_date": "04-Jan-2024 01:30 PM",
+        "organisation_name": "NIC-TEST1",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTE0NTEzOTA=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMwNzM2NQ==A13h1MjAyNC1UZXN0c3BwdGVhbS0wMDI=A13h1MjAyNF9OSUNUU183NDA0MjNfMQ==",
+        "corrigendum_url": null
+    }
+]

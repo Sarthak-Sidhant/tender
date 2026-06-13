@@ -1,0 +1,41 @@
+[
+    {
+        "serial_number": 1,
+        "title": "Software for ALS LRV",
+        "reference_number": "50106/DIS/ALS(LRV)/SW/SDD/01",
+        "tender_id": "2013_Army_134280_1",
+        "internal_id": "1719340",
+        "e_published_date": "25-Sep-2013 09:00 AM",
+        "bid_submission_closing_date": "23-Oct-2013 09:00 AM",
+        "tender_opening_date": "24-Oct-2013 09:00 AM",
+        "organisation_name": "Simulator Development Division",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTcxOTM0MA==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjE4NQ==A13h1NTAxMDYvRElTL0FMUyhMUlYpL1NXL1NERC8wMQ==A13h1MjAxM19Bcm15XzEzNDI4MF8x",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 2,
+        "title": "Hardware for ALS LRV",
+        "reference_number": "50106/DIS/ALS(LRV)/HW/SDD/03",
+        "tender_id": "2013_Army_134293_1",
+        "internal_id": "1741669",
+        "e_published_date": "25-Sep-2013 09:00 AM",
+        "bid_submission_closing_date": "23-Oct-2013 09:00 AM",
+        "tender_opening_date": "24-Oct-2013 09:00 AM",
+        "organisation_name": "Simulator Development Division",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTc0MTY2OQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjE4NQ==A13h1NTAxMDYvRElTL0FMUyhMUlYpL0hXL1NERC8wMw==A13h1MjAxM19Bcm15XzEzNDI5M18x",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 3,
+        "title": "MOCKUP for ALS LRV",
+        "reference_number": "50106/DIS/ALS(LRV)/mock up/SDD/02",
+        "tender_id": "2013_Army_134228_1",
+        "internal_id": "1545065",
+        "e_published_date": "24-Sep-2013 11:00 AM",
+        "bid_submission_closing_date": "23-Oct-2013 05:00 PM",
+        "tender_opening_date": "24-Oct-2013 10:00 AM",
+        "organisation_name": "Simulator Development Division",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTU0NTA2NQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjE4NQ==A13h1NTAxMDYvRElTL0FMUyhMUlYpL21vY2sgdXAvU0RELzAyA13h1MjAxM19Bcm15XzEzNDIyOF8x",
+        "corrigendum_url": null
+    }
+]

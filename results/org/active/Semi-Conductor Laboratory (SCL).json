@@ -1,0 +1,54 @@
+[
+    {
+        "serial_number": 1,
+        "title": "Test Wafer N-Type for Implant",
+        "reference_number": "C-45191",
+        "tender_id": "2026_SCL_908708_1",
+        "internal_id": "13748490",
+        "e_published_date": "15-May-2026 04:00 PM",
+        "bid_submission_closing_date": "15-Jun-2026 11:00 AM",
+        "tender_opening_date": "16-Jun-2026 11:30 AM",
+        "organisation_name": "Semi-Conductor Laboratory (SCL)",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM3NDg0OTA=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1ODIyNA==A13h1Qy00NTE5MQ==A13h1MjAyNl9TQ0xfOTA4NzA4XzE=",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 2,
+        "title": "Sensor optical fiber as per Tender Document",
+        "reference_number": "45195",
+        "tender_id": "2026_SCL_911578_1",
+        "internal_id": "13805622",
+        "e_published_date": "04-Jun-2026 05:15 PM",
+        "bid_submission_closing_date": "15-Jun-2026 02:00 PM",
+        "tender_opening_date": "16-Jun-2026 02:05 PM",
+        "organisation_name": "Semi-Conductor Laboratory (SCL)",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM4MDU2MjI=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1ODIyNA==A13h1NDUxOTU=A13h1MjAyNl9TQ0xfOTExNTc4XzE=",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 3,
+        "title": "Supply of Sealing Window for Imager 2 and 3",
+        "reference_number": "SCL/PS/45185/VAHD",
+        "tender_id": "2026_SCL_910473_1",
+        "internal_id": "13780795",
+        "e_published_date": "27-May-2026 01:30 PM",
+        "bid_submission_closing_date": "17-Jun-2026 04:00 PM",
+        "tender_opening_date": "18-Jun-2026 04:10 PM",
+        "organisation_name": "Semi-Conductor Laboratory (SCL)",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM3ODA3OTU=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1ODIyNA==A13h1U0NML1BTLzQ1MTg1L1ZBSEQ=A13h1MjAyNl9TQ0xfOTEwNDczXzE=",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 4,
+        "title": "Ceramic IC Package 400 PGA for Atlas Mx Detector",
+        "reference_number": "65771",
+        "tender_id": "2026_SCL_910435_1",
+        "internal_id": "13780661",
+        "e_published_date": "27-May-2026 12:00 PM",
+        "bid_submission_closing_date": "18-Jun-2026 03:00 PM",
+        "tender_opening_date": "19-Jun-2026 04:00 PM",
+        "organisation_name": "Semi-Conductor Laboratory (SCL)",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM3ODA2NjE=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1ODIyNA==A13h1NjU3NzE=A13h1MjAyNl9TQ0xfOTEwNDM1XzE=",
+        "corrigendum_url": null
+    }
+]

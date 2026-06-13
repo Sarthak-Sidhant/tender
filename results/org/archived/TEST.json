@@ -1,0 +1,54 @@
+[
+    {
+        "serial_number": 1,
+        "title": "Test Tender 26102105",
+        "reference_number": "2015_TEST_52613_1",
+        "tender_id": "2015_TEST_52613_1",
+        "internal_id": "2438868",
+        "e_published_date": "27-Oct-2015 09:00 AM",
+        "bid_submission_closing_date": "27-Oct-2015 09:00 AM",
+        "tender_opening_date": "27-Oct-2015 09:00 AM",
+        "organisation_name": "TEST",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjQzODg2OA==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI2NDA1OA==A13h1VGVzdCBUZW5kZXIgMjYxMDIxMDU=A13h1MjAxNV9URVNUXzUyNjEzXzE=",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 2,
+        "title": "Test Tender 24112015",
+        "reference_number": "2015_TEST_57364_1",
+        "tender_id": "2015_TEST_57364_1",
+        "internal_id": "2500353",
+        "e_published_date": "24-Nov-2015 06:00 PM",
+        "bid_submission_closing_date": "25-Nov-2015 03:45 PM",
+        "tender_opening_date": "25-Nov-2015 03:45 PM",
+        "organisation_name": "TEST",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjUwMDM1Mw==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI2NDA1OA==A13h1VGVzdCBUZW5kZXIgMjQxMTIwMTU=A13h1MjAxNV9URVNUXzU3MzY0XzE=",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/VGVzdCBUZW5kZXIgMjQxMTIwMTU=A13h1MjAxNV9URVNUXzU3MzY0XzE="
+    },
+    {
+        "serial_number": 3,
+        "title": "NDA 27062018",
+        "reference_number": "2018_TEST_353813_1",
+        "tender_id": "2018_TEST_353813_1",
+        "internal_id": "5144041",
+        "e_published_date": "28-Jun-2018 09:00 AM",
+        "bid_submission_closing_date": "18-Jul-2018 09:00 AM",
+        "tender_opening_date": "28-Jul-2018 09:00 AM",
+        "organisation_name": "TEST",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/NTE0NDA0MQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI2NDA1OA==A13h1TkRBIDI3MDYyMDE4A13h1MjAxOF9URVNUXzM1MzgxM18x",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 4,
+        "title": "Two Stage 27062018",
+        "reference_number": "2018_TEST_353814_1",
+        "tender_id": "2018_TEST_353814_1",
+        "internal_id": "5144042",
+        "e_published_date": "28-Jun-2018 09:00 AM",
+        "bid_submission_closing_date": "26-Jul-2018 09:00 AM",
+        "tender_opening_date": "31-Jul-2018 09:00 AM",
+        "organisation_name": "TEST",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/NTE0NDA0Mg==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI2NDA1OA==A13h1VHdvIFN0YWdlIDI3MDYyMDE4A13h1MjAxOF9URVNUXzM1MzgxNF8x",
+        "corrigendum_url": null
+    }
+]

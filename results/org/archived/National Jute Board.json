@@ -1,0 +1,41 @@
+[
+    {
+        "serial_number": 1,
+        "title": "Tender Notification",
+        "reference_number": "2./NJB/2019-20",
+        "tender_id": "1",
+        "internal_id": "6225478",
+        "e_published_date": "16-Mar-2020 04:23 PM",
+        "bid_submission_closing_date": "07-Apr-2020 05:00 PM",
+        "tender_opening_date": "08-Apr-2020 11:30 AM",
+        "organisation_name": "National Jute Board",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/NjIyNTQ3OA==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1NDY3MA==A13h1Mi4vTkpCLzIwMTktMjA=A13h1MQ==",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/Mi4vTkpCLzIwMTktMjA=A13h1MQ=="
+    },
+    {
+        "serial_number": 2,
+        "title": "Tender Notification",
+        "reference_number": "3./NJB/2019-20",
+        "tender_id": "1",
+        "internal_id": "6283531",
+        "e_published_date": "02-May-2020 11:05 AM",
+        "bid_submission_closing_date": "18-May-2020 05:00 PM",
+        "tender_opening_date": "19-May-2020 11:30 AM",
+        "organisation_name": "National Jute Board",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/NjI4MzUzMQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1NDY3MA==A13h1My4vTkpCLzIwMTktMjA=A13h1MQ==",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 3,
+        "title": "Tender Notification",
+        "reference_number": "04/NJB/2019/SRA",
+        "tender_id": "1",
+        "internal_id": "9323631",
+        "e_published_date": "03-Jun-2021 08:51 PM",
+        "bid_submission_closing_date": "22-Jun-2021 05:00 PM",
+        "tender_opening_date": "23-Jun-2021 02:00 PM",
+        "organisation_name": "National Jute Board",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/OTMyMzYzMQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1NDY3MA==A13h1MDQvTkpCLzIwMTkvU1JBA13h1MQ==",
+        "corrigendum_url": null
+    }
+]

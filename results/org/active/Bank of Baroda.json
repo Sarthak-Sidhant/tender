@@ -1,0 +1,41 @@
+[
+    {
+        "serial_number": 1,
+        "title": "Tender Notification",
+        "reference_number": "GEM/2026/B/7543820",
+        "tender_id": "1",
+        "internal_id": "13748584",
+        "e_published_date": "15-May-2026 03:00 PM",
+        "bid_submission_closing_date": "15-Jun-2026 03:00 PM",
+        "tender_opening_date": "15-Jun-2026 03:30 PM",
+        "organisation_name": "Bank of Baroda",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM3NDg1ODQ=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1NTc2OA==A13h1R0VNLzIwMjYvQi83NTQzODIwA13h1MQ==",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/R0VNLzIwMjYvQi83NTQzODIwA13h1MQ=="
+    },
+    {
+        "serial_number": 2,
+        "title": "Tender Notification",
+        "reference_number": "GEM/2026/B/7566749",
+        "tender_id": "1",
+        "internal_id": "13765180",
+        "e_published_date": "21-May-2026 03:00 PM",
+        "bid_submission_closing_date": "22-Jun-2026 03:00 PM",
+        "tender_opening_date": "22-Jun-2026 03:30 PM",
+        "organisation_name": "Bank of Baroda",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM3NjUxODA=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1NTc2OA==A13h1R0VNLzIwMjYvQi83NTY2NzQ5A13h1MQ==",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/R0VNLzIwMjYvQi83NTY2NzQ5A13h1MQ=="
+    },
+    {
+        "serial_number": 3,
+        "title": "Tender Notification",
+        "reference_number": "BCC:DIGITAL:DC:118:557",
+        "tender_id": "1",
+        "internal_id": "13809383",
+        "e_published_date": "03-Jun-2026 10:00 AM",
+        "bid_submission_closing_date": "24-Jun-2026 03:00 PM",
+        "tender_opening_date": "24-Jun-2026 03:00 PM",
+        "organisation_name": "Bank of Baroda",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MTM4MDkzODM=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTI1NTc2OA==A13h1QkNDOkRJR0lUQUw6REM6MTE4OjU1Nw==A13h1MQ==",
+        "corrigendum_url": null
+    }
+]

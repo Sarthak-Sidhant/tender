@@ -1,0 +1,67 @@
+[
+    {
+        "serial_number": 1,
+        "title": "Test Tender",
+        "reference_number": "2015_EPUB_3818_1",
+        "tender_id": "2015_EPUB_3818_1",
+        "internal_id": "2042797",
+        "e_published_date": "15-Jun-2015 03:10 PM",
+        "bid_submission_closing_date": "15-Jun-2015 05:15 PM",
+        "tender_opening_date": "15-Jun-2015 05:30 PM",
+        "organisation_name": "ORG for ePublishing",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjA0Mjc5Nw==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjYxMw==A13h1VGVzdCBUZW5kZXI=A13h1MjAxNV9FUFVCXzM4MThfMQ==",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/VGVzdCBUZW5kZXI=A13h1MjAxNV9FUFVCXzM4MThfMQ=="
+    },
+    {
+        "serial_number": 2,
+        "title": "Test Tender",
+        "reference_number": "Check _Flow",
+        "tender_id": "2015_EPUB_3847_1",
+        "internal_id": "2069198",
+        "e_published_date": "01-Jul-2015 12:10 PM",
+        "bid_submission_closing_date": "03-Jul-2015 05:00 PM",
+        "tender_opening_date": "03-Jul-2015 05:00 PM",
+        "organisation_name": "ORG for ePublishing",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjA2OTE5OA==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjYxMw==A13h1Q2hlY2sgX0Zsb3c=A13h1MjAxNV9FUFVCXzM4NDdfMQ==",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 3,
+        "title": "Retender",
+        "reference_number": "Test Tender for Open",
+        "tender_id": "2015_EPUB_15854_4",
+        "internal_id": "2099859",
+        "e_published_date": "21-Jul-2015 11:40 AM",
+        "bid_submission_closing_date": "21-Jul-2015 02:00 PM",
+        "tender_opening_date": "21-Jul-2015 02:00 PM",
+        "organisation_name": "ORG for ePublishing",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjA5OTg1OQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjYxMw==A13h1VGVzdCBUZW5kZXIgZm9yIE9wZW4=A13h1MjAxNV9FUFVCXzE1ODU0XzQ=",
+        "corrigendum_url": null
+    },
+    {
+        "serial_number": 4,
+        "title": "Test Tender forPublished",
+        "reference_number": "Test Tender for Open",
+        "tender_id": "2015_EPUB_15854_1",
+        "internal_id": "2099773",
+        "e_published_date": "21-Jul-2015 11:00 AM",
+        "bid_submission_closing_date": "24-Jul-2015 09:00 AM",
+        "tender_opening_date": "24-Jul-2015 09:00 AM",
+        "organisation_name": "ORG for ePublishing",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjA5OTc3Mw==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjYxMw==A13h1VGVzdCBUZW5kZXIgZm9yIE9wZW4=A13h1MjAxNV9FUFVCXzE1ODU0XzE=",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/VGVzdCBUZW5kZXIgZm9yIE9wZW4=A13h1MjAxNV9FUFVCXzE1ODU0XzE="
+    },
+    {
+        "serial_number": 5,
+        "title": "Test Tender for Retender",
+        "reference_number": "Test Tender for Open",
+        "tender_id": "2015_EPUB_15854_3",
+        "internal_id": "2099821",
+        "e_published_date": "21-Jul-2015 11:10 AM",
+        "bid_submission_closing_date": "24-Jul-2015 09:00 AM",
+        "tender_opening_date": "24-Jul-2015 09:05 AM",
+        "organisation_name": "ORG for ePublishing",
+        "detail_url": "https://eprocure.gov.in/cppp/tendersfullview/MjA5OTgyMQ==A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1OGQ2NzAxYTMwZTJhNTIxMGNiNmEwM2EzNmNhYWZhODk=A13h1MTc4MTMxNjYxMw==A13h1VGVzdCBUZW5kZXIgZm9yIE9wZW4=A13h1MjAxNV9FUFVCXzE1ODU0XzM=",
+        "corrigendum_url": "https://eprocure.gov.in/cppp/listofcorrigendums/VGVzdCBUZW5kZXIgZm9yIE9wZW4=A13h1MjAxNV9FUFVCXzE1ODU0XzM="
+    }
+]
